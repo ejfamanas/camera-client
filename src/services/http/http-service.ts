@@ -15,6 +15,21 @@ export class HttpService<T> {
         }
     }
 
+    public async testAuthenticatedConnection(endpoint: string): Promise<void> {
+        return this.getAll(endpoint).then((data: T) => {
+            if (data !== undefined) {
+                return Promise.resolve();
+            } else {
+                return Promise.reject("Authentication failed");
+            }
+        })
+    }
+
+    public async getOpenApiDocs(docsUrl: string): Promise<JSON> {
+        return http.get(`${this._url}/${docsUrl}/openapi.json`)
+            .then(({data}: AxiosResponse<JSON>) => data);
+    }
+
     public async getAll(endpoint: string): Promise<T> {
         return http.get(`${this._url}/${this._api}/${endpoint}`, {
             auth: this._auth

@@ -1,33 +1,33 @@
-import {StillCamera, StillOptions, StreamCamera, StreamOptions} from "pi-camera-connect";
+import {StillOptions, StreamCamera, StreamOptions} from "pi-camera-connect";
 import fs, {WriteStream} from "fs";
 import {Readable} from "stream";
+import {StillCameraService} from "./micro-services/still-camera.service";
 
-export class PiCamera {
-    private _stillCamera: StillCamera;
+export class PiCameraService {
+    private _stillCameraOptions: StillOptions | undefined;
     private _streamCamera: StreamCamera;
-    private readonly _parentDirectory: string;
 
-    public constructor(parentDirectory: string, stillCameraOptions?: StillOptions, streamCameraOptions?: StreamOptions) {
-        this._parentDirectory = parentDirectory;
-        this._stillCamera = new StillCamera(stillCameraOptions);
+    private readonly _directory: string;
+    private readonly _stillCameraService: StillCameraService;
+
+    public constructor(
+        directory: string = "./",
+        stillCameraOptions: StillOptions | undefined = undefined,
+        streamCameraOptions?: StreamOptions
+    ) {
+        this._directory = directory;
         this._streamCamera = new StreamCamera(streamCameraOptions);
+        this._stillCameraService = new StillCameraService(this._directory);
+        this._stillCameraService.stillOptions = stillCameraOptions;
     }
 
-    public async takePhoto(subDirectory: string, imageName: string): Promise<void> {
-        let image: Buffer | null = null;
-        try {
-            image = await this._stillCamera.takeImage();
-        } catch (e) {
-            console.log("Failed to capture image", e);
-        }
-        if (image === null) {
-            return Promise.reject("Image not captured, aborting takePhoto function");
-        }
-        try {
-            fs.writeFileSync(`${this._parentDirectory}/${subDirectory}/${imageName}`, image);
-        } catch (e) {
-            console.log("Failed to write image", e);
-        }
+    public set stillCameraOptions(value: StillOptions) {
+        this._stillCameraOptions = value;
+    }
+
+    public async takePhotoWriteSync(imageName?: string): Promise<void> {
+        this._stillCameraService.stillOptions = this.stillCameraOptions;
+        await this._stillCameraService.imageCaptureWriteSync(imageName);
     }
 
     public async takeVideo(subDirectory: string, videoName: string, captureLength = 5000): Promise<void> {
@@ -42,7 +42,7 @@ export class PiCamera {
             return Promise.reject("Video stream not created, aborting takeVideo function");
         }
         try {
-            writeStream = fs.createWriteStream(`${this._parentDirectory}/${subDirectory}/${videoName}`);
+            writeStream = fs.createWriteStream(`${this._directory}/${subDirectory}/${videoName}`);
         } catch (e) {
             console.log("Failed to create write stream", e);
         }

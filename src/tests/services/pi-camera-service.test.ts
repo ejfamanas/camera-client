@@ -1,5 +1,5 @@
-import {PiCamera} from "../services/camera/pi-camera";
 import {Codec} from "pi-camera-connect";
+import {PiCameraService} from "../../services/camera/pi-camera-service";
 
 const testDirectory = "tests/output";
 const testPhotoDirectory = "photos";
@@ -9,14 +9,14 @@ const testVideoDirectory = "videos";
 
 test("should be able to take a picture", async () => {
     const photoName = "test.jpg";
-    const piCamera = new PiCamera(testDirectory);
-    await piCamera.takePhoto(testPhotoDirectory, photoName);
+    const piCamera = new PiCameraService(testDirectory);
+    await piCamera.takePhotoWriteSync(testPhotoDirectory, photoName);
     // TODO: Check if file is created
 });
 
 test("should be able to take a video", async () => {
     const videoName = "test.h264"
-    const piCamera = new PiCamera(
+    const piCamera = new PiCameraService(
         testDirectory,
         {},
         {

@@ -1,6 +1,6 @@
 import {ProcessLoggerFactory} from "../../logger/process-logger-factory.service";
 import {cameraService} from "../../logger/logger-config";
-import {FileWritingService} from "../../local/micro-services/file-writing.service";
+import {FileWritingService} from "../../local/services/file-writing.service";
 import {StillOptions} from "pi-camera-connect";
 import StillCamera from "pi-camera-connect/dist/lib/still-camera";
 

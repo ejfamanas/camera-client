@@ -26,9 +26,9 @@ export class StillCameraService extends ProcessLoggerFactory {
 
     public async imageCaptureWriteSync(fileName?: string): Promise<void> {
         const stillCamera = new StillCamera(this._stillCameraOptions);
-        const parsedFileName = fileName !== undefined ? fileName : StillCameraService.getUntitledFileName();
-
+        const parsedFileName = fileName !== undefined ? fileName : this.getUntitledFileName();
         let image: Buffer | null = null;
+
         try {
             super.startProcess();
             image = await stillCamera.takeImage();
@@ -46,7 +46,7 @@ export class StillCameraService extends ProcessLoggerFactory {
         }
     }
 
-    private static getUntitledFileName(): string {
+    private getUntitledFileName(): string {
         return "";
     }
 }

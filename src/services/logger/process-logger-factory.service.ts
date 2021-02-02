@@ -4,10 +4,13 @@ export class ProcessLoggerFactory {
     private readonly _category: Category;
     private readonly _processName: string;
 
+
     protected constructor(category: Category, processName: string) {
         this._category = category;
         this._processName = processName;
     }
+
+    protected readonly myVariable: string = "my string";
 
     public getAbortMessage(): string {
         return `${this._processName} has failed, aborting function`;

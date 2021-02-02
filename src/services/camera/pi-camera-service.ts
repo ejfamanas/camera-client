@@ -25,7 +25,7 @@ export class PiCameraService {
         this._stillCameraOptions = value;
     }
 
-    public async takePhotoWriteSync(imageName?: string): Promise<void> {
+    public async takePhotoWriteSync(directoryName: string, imageName?: string): Promise<void> {
         this._stillCameraService.stillOptions = this.stillCameraOptions;
         await this._stillCameraService.imageCaptureWriteSync(imageName);
     }

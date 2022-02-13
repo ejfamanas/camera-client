@@ -11,7 +11,7 @@
     "@types/node": "^12.19.15",
     "@types/react": "^16.14.2",
     "@types/react-dom": "^16.9.10",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "pi-camera-connect": "^0.3.4",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
